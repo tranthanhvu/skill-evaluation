@@ -1,46 +1,37 @@
 # Agent Skill Evaluation
 
-Agent Skill Eval is a planned tool for testing which instructions in an
-AI agent's SKILL.md improve its work. It compares models on the same
-tasks and shows the effect of removing individual instructions.
+Agent Skill Eval is a planned tool for evaluating third-party agent skills.
+It reads a SKILL.md, identifies its instructions and reasoning requirements,
+and tests how much each instruction contributes across models.
 
-## How it works
+## Workflow
 
-1. Import a SKILL.md. The runner extracts the steps from the skill,
-   and you select which ones to test.
-2. Run the same task with the full skill and again with one selected
-   step removed. Keep the model version, inputs, tools, output schema,
-   and grading rules fixed between the two runs.
-3. Compare the results. The report shows evidence of whether the model
-   performed each step and how removing the instruction affected the
-   final deliverable, latency, and token usage.
+1. Import a skill. Extract explicit steps, conditional rules, and output
+   requirements. Link each item to its source text. Record dependencies
+   between steps and let the user correct the extracted structure.
+2. Use representative tasks that exercise the skill's own requirements.
+   Include cases where conditional steps should and should not apply.
+3. Run each task with the full skill, without the skill, and with one
+   selected instruction removed at a time. Use the same grading criteria
+   for every variant. Flag removals that break dependent steps.
+4. Report, per instruction and model, whether the step was performed,
+   how well it was performed, and how its removal affected the final
+   deliverable. Attach evidence from outputs and available tool traces.
 
-## First benchmark
+Use deterministic checks when expected results can be verified in code.
+For qualitative outcomes, an AI reviewer proposes a score with evidence.
+Users can inspect the evidence and override the score.
 
-The first benchmark uses 12 rental invoices with known answers. Four
-are correct, six contain one error, and two contain multiple errors.
-Each fixture has expected line items, totals, and discrepancies.
+## First milestone
 
-The first comparison uses pinned Claude Sonnet and GPT versions, with
-three runs per fixture per condition. The runner checks exact VND
-amounts, missed discrepancies, and false positives automatically.
-An AI reviewer can score explanation quality against a rubric, cite
-the evidence, and let users review or override its score.
+Use 12 invoice fixtures to verify that the runner and automated grader
+work end to end. Then evaluate a third-party workflow such as AgentKit's
+/ak-plan. Start with pinned Claude Sonnet and GPT versions, with local
+model support planned.
 
-Local model support is planned. A smaller model might expose an
-instruction that relies on unstated assumptions. A stronger model
-might reliably do the same work after that instruction is removed.
-The report shows the evidence for each model on the tasks tested.
-
-## Devin workflow
-
-If approved, Devin's first PR will implement the 12 fixtures and their
-answer keys for me to review. The next PRs will add the runner, model
-adapters, and comparison report. In CI, the runner will compare skill
-changes against the approved baseline. Devin can reproduce a flagged
-regression and propose a fix or a new fixture in a PR.
+If approved, Devin will help implement the skill parser, benchmark runner,
+model adapters, and comparison report.
 
 ## Status
 
-The benchmark is designed. Implementation and repository setup are
-pending. The project will be hosted on GitHub.
+The project is at the design stage. GitHub hosting is planned.
