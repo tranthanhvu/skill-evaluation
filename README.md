@@ -1,4 +1,4 @@
-# Agent Skill Eval
+# Agent Skill Evaluation
 
 Agent Skill Eval is a planned tool for testing which instructions in an
 AI agent's SKILL.md improve its work. It compares models on the same
